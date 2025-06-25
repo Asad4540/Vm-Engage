@@ -8,9 +8,11 @@
                 <h1 class="cd-title">Main Dashboard</h1>
                 <p class="cd-subtitle">Pages / Dashboard</p>
             </div>
-            <a href="{{ route('profile')}}" class="d-flex justify-content-end">
-              <img src="images/profile3.png" class="profile-section" alt="">
-            </a>
+            <div>
+                <a href="{{ route('profile')}}" class="d-flex justify-content-end">
+                    <img src="images/profile3.png" class="profile-section" alt="">
+                </a>
+            </div>
         </div>
     </section>
 

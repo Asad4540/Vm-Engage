@@ -14,8 +14,15 @@ class ClientCampaignController extends Controller
     public function index(Request $request)
     {
         $clients = Client::all();
+        $user = auth()->user(); // get the logged-in user
         $query = Campaign::query();
 
+        // ✅ Apply client-based filter for client users (e.g., role_id = 2)
+        if ($user->role_id == 2 && $user->client_id) {
+            $query->where('client_id', $user->client_id);
+        }
+
+        // 🔍 Search logic remains unchanged
         if ($request->has('search')) {
             $query->where(function ($q) use ($request) {
                 $q->whereHas('client', function ($clientQuery) use ($request) {
@@ -37,6 +44,7 @@ class ClientCampaignController extends Controller
 
         return view('client-campaign', compact('clients', 'campaigns'));
     }
+
 
     public function edit($hashid)
     {

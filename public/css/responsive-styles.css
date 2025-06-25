@@ -1,0 +1,135 @@
+@media only screen and (max-width: 768px) {
+    .dashboard-main-container {
+        padding: 20px;
+    }
+
+    .main-content-section {
+        border-radius: 15px;
+        padding: 20px;
+    }
+}
+
+@media only screen and (min-width: 991px) {
+    nav.main-navbar {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 991px) {
+    .dashboard-main-container {
+        padding-left: 0;
+    }
+}
+
+/********************************************************* Login Page **************************************************/
+@media (max-width: 767.98px) {
+    .login-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .login-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .login-card {
+        padding: 1.75rem 1.25rem;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.03);
+    }
+
+    .login-title {
+        font-size: 1.4rem;
+    }
+
+    .login-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 1.75rem;
+    }
+}
+
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .login-section {
+        padding: 1rem 0.5rem;
+    }
+
+    .custom-input-group .form-control {
+        height: 45px;
+    }
+
+    .btn-login {
+        height: 45px;
+    }
+
+    .login-card {
+        padding: 1.75rem 1.25rem;
+        max-width: 100%;
+        min-height: auto;
+        /* allow natural height */
+    }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .login-card {
+        max-width: 450px;
+        margin: 0 auto;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .login-card {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .login-card {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 1401px) {
+    .login-title {
+        font-size: 1.5rem;
+    }
+}
+
+/********************************************************* Login Page Ends here **************************************************/
+/********************************************************* Ads Campaign Starts here **************************************************/
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .search-container {
+        width: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .col-md-6 {
+        margin-bottom: 15px;
+    }
+
+    .col-md-6:last-child {
+        justify-content: flex-start;
+    }
+
+    .search-container {
+        width: 100%;
+        max-width: 250px;
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .campaign-table {
+        min-width: 800px;
+    }
+}
+
+/********************************************************* Ads Campaign Ends here **************************************************/

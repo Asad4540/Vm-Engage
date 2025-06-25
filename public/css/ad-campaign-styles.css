@@ -1,0 +1,139 @@
+        body {
+            font-family: "Poppins";
+            background-color: #f9f9f9;
+        }
+
+        /* Search input styling */
+        .search-container {
+            position: relative;
+            width: 270px;
+        }
+
+        .search-input {
+            border-radius: 13px;
+            padding-right: 30px;
+            border: 1px solid #e0e0e0;
+            height: 50px;
+            padding-left: 15px;
+        }
+
+        .search-button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #aaa;
+        }
+
+        /* Add button styling */
+        .btn-add {
+            background-color: #6610f2;
+            color: white;
+            border-radius: 6px;
+            padding: 8px 20px;
+            font-weight: 500;
+        }
+
+        .btn-add:hover {
+            background-color: var(--btn-hover);
+            color: white;
+        }
+
+        /* Table styling */
+        .campaign-table-container {
+            background-color: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1.5px solid var(--txt-primary);
+        }
+
+        /* .campaign-table {
+            padding: 0px 18px;
+        } */
+
+        /* .campaign-table thead {
+            border-bottom: 1.5px solid var(--txt-primary);
+        } */
+
+        /* .campaign-table th {
+            color: var(--text-cd-secondary);
+            font-weight: 500;
+            padding: 26px;
+            border: none;
+            background-color: var(--bg-body);
+
+        } */
+
+        .campaign-table td {
+            padding: 16px;
+            padding-left: 35px;
+            padding-top: 29px;
+            padding-bottom: 10px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+        }
+
+        .campaign-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Status indicators */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-active {
+            background-color: #10ca93;
+        }
+
+        .status-pending {
+            background-color: #F7D723;
+        }
+
+        .status-paused {
+            background-color: #E9002B;
+        }
+
+        /* Ad preview image */
+        .ad-preview-img {
+            width: 62px;
+            height: 68px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* Action buttons */
+        .action-btn {
+            background: none;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 2px;
+            color: #666;
+        }
+
+        .edit-btn {
+            color: #6610f2;
+            background-color: #f5f3ff;
+        }
+
+        .delete-btn {
+            color: #ff3a5e;
+            background-color: #fff0f3;
+        }

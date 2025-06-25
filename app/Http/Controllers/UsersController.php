@@ -30,8 +30,11 @@ class UsersController extends Controller
         }
 
         $roles = Role::all();
-        return view('users', compact('roles', 'users'));
+        $clients = \App\Models\Client::all(); // ✅ Fetch all clients
+
+        return view('users', compact('roles', 'users', 'clients')); // ✅ Pass to view
     }
+
 
 
     public function create(Request $request)
@@ -39,8 +42,9 @@ class UsersController extends Controller
         $validator = FacadesValidator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
-            'role' => 'required|integer', // Validate role_id
-            'password' => 'required|string|min:8|', // Confirm password for security
+            'role' => 'required|integer',
+            'client_id' => 'nullable|exists:clients,id', // Validate client_id
+            'password' => 'required|string|min:8',
         ]);
 
         if ($validator->fails()) {
@@ -50,12 +54,12 @@ class UsersController extends Controller
             ], 422);
         }
 
-        // Create the user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $request->role,
+            'client_id' => $request->client_id, // Save client
         ]);
 
         return response()->json([
@@ -64,6 +68,7 @@ class UsersController extends Controller
             'user' => $user,
         ], 201);
     }
+
 
     public function destroy($id)
     {
@@ -91,17 +96,21 @@ class UsersController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $id,
             'role_id' => 'required|integer',
+            'client_id' => 'nullable|exists:clients,id',
         ]);
 
         $user = User::findOrFail($id);
+
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'role_id' => $request->role_id,
+            'client_id' => $request->client_id,
         ]);
 
         return response()->json(['status' => 'success', 'message' => 'User updated successfully']);
     }
+
 
 
 

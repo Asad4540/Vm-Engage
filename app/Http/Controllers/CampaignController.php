@@ -9,7 +9,6 @@ use Carbon\Carbon;
 
 class CampaignController extends Controller
 {
-
     public function export()
     {
         $date = Carbon::now()->format('d-m-Y');

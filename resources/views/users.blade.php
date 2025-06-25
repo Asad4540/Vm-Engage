@@ -89,9 +89,9 @@
     </section>
 
 
-    <!--Add Client Modal -->
+    <!--Add User Modal -->
     <div class="modal fade" id="addClientModal" tabindex="-1" aria-labelledby="addClientModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog">
             <div class="modal-content rounded-4 p-3">
                 <div class="modal-header border-0">
                     <h5 class="modal-title fw-bold" id="addClientModal">Add User</h5>
@@ -121,6 +121,21 @@
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label fw-semibold">Client Access</label>
+                            <select class="form-control" name="" id="">
+                                <option value="" disabled selected>--Select Client--</option>
+                                @if (!empty($clients) && count($clients))
+                                    @foreach ($clients as $client)
+                                        <option value="{{ $client->id }}">{{ $client->name }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="">No clients available</option>
+                                @endif
+                            </select>
+
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label fw-semibold">Set a Password</label>
                             <input type="password" class="form-control" name="password" placeholder="**********">
                         </div>
@@ -137,7 +152,7 @@
 
     <!-- Edit User Modal -->
     <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog">
             <form id="formEditUser">
                 <div class="modal-content rounded-4 p-3">
                     <div class="modal-header border-0">
@@ -159,6 +174,15 @@
                             <select class="form-control" id="edit-role" name="role_id" required>
                                 @foreach ($roles as $role)
                                     <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Client Access</label>
+                            <select class="form-control" name="client_id" id="client_id">
+                                <option value="" disabled selected>--Select Client--</option>
+                                @foreach ($clients as $client)
+                                    <option value="{{ $client->id }}">{{ $client->name }}</option>
                                 @endforeach
                             </select>
                         </div>

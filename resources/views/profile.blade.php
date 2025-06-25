@@ -9,55 +9,44 @@
                 <p class="cd-subtitle">Pages / Profile</p>
             </div>
             <div>
-                <h3>Hello, <strong>Asad</strong>!</h3>
+                <h3>Hello, <strong>User</strong>!</h3>
             </div>
         </div>
     </section>
 
     <section class="mt-4">
-        <div class="d-flex row border shadow rounded-2 p-5 w-75">
-            <div class="col">
-                <form action="">
-                    <div class="p-5">
-                        <!-- <div>
+        <center>
+            <div class="border shadow rounded-2 p-5 w-50">
+
+                <div class="text-center">
+                    <form action="">
+                        <div>
+                            <img src="images/profile-icon.png" alt="" class="w-25">
+                        </div><br>
+                        <h3>User Name</h3> <br>
+                        <hr>
+                        <h5>Change Password</h5> <br>
+                        <div>
                             <p>Enter your current password :</p>
-                            <input type="password" name="" id="">
+                            <input type="password" class="w-50" name="" id="">
                         </div> <br>
                         <div>
                             <p>Enter new password :</p>
-                            <input type="password" name="" id="">
+                            <input type="password" class="w-50" name="" id="">
                         </div> <br>
                         <div>
                             <p>Confirm new password :</p>
-                            <input type="password" name="" id="">
-                        </div> <br> -->
+                            <input type="password" class="w-50" name="" id="">
+                        </div> <br><br>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button class="btn-secondary-db">Cancel</button>
+                            <button class="btn-primary-db">Save</button>
+                        </div>
+                    </form>
+                </div>
 
-                    </div>
-                </form>
             </div>
-            <div class="col">
-                <form action="">
-                    <h5>Change Password</h5> <br>
-                    <div>
-                        <p>Enter your current password :</p>
-                        <input type="password" name="" id="">
-                    </div> <br>
-                    <div>
-                        <p>Enter new password :</p>
-                        <input type="password" name="" id="">
-                    </div> <br>
-                    <div>
-                        <p>Confirm new password :</p>
-                        <input type="password" name="" id="">
-                    </div> <br>
-                    <div class="d-flex justify-content-end gap-2">
-                        <button class="btn-secondary-db">Cancel</button>
-                        <button class="btn-primary-db">Save</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
+        <center>
     </section>
 
 

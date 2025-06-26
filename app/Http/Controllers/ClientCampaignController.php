@@ -17,9 +17,13 @@ class ClientCampaignController extends Controller
         $user = auth()->user(); // get the logged-in user
         $query = Campaign::query();
 
-        // ✅ Apply client-based filter for client users (e.g., role_id = 2)
-        if ($user->role_id == 2 && $user->client_id) {
-            $query->where('client_id', $user->client_id);
+        if ($user->role_id == 2) {
+            if ($user->client_id) {
+                $query->where('client_id', $user->client_id);
+            } else {
+                // Force empty result if client_id is null
+                $query->whereRaw('1 = 0');
+            }
         }
 
         if ($request->has('search')) {

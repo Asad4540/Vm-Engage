@@ -41,6 +41,7 @@ class DashboardController extends Controller
                     $datesArray = array_fill(0, count($clicksArray), now()->format('Y-m-d'));
                 }
 
+
                 foreach ($clicksArray as $i => $click) {
                     $date = $datesArray[$i] ?? now()->format('Y-m-d');
 
@@ -74,10 +75,16 @@ class DashboardController extends Controller
                 'December'
             ];
 
-            // Sort $flatData based on defined month order
-            uksort($flatData, function ($a, $b) use ($monthOrder) {
-                return array_search($a, $monthOrder) <=> array_search($b, $monthOrder);
-            });
+            // Ensure $flatData is initialized
+            $flatData = $flatData ?? [];
+
+            // Only sort if $flatData has data
+            if (!empty($flatData)) {
+                // Sort $flatData based on defined month order
+                uksort($flatData, function ($a, $b) use ($monthOrder) {
+                    return array_search($a, $monthOrder) <=> array_search($b, $monthOrder);
+                });
+            }
 
             // Format for frontend chart
             $campaignData = collect($flatData)->map(function ($data, $month) {

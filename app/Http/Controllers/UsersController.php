@@ -111,4 +111,18 @@ class UsersController extends Controller
         return response()->json(['status' => 'success', 'message' => 'User updated successfully']);
     }
 
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'new_password' => ['required', 'min:8', 'confirmed'],
+        ]);
+
+        $user = auth()->user();
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return back()->with('success', 'Password updated successfully!');
+    }
+
 }

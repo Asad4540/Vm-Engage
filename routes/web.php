@@ -39,8 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/client-campaign/{hashid}/edit', [ClientCampaignController::class, 'edit'])->name('campaigns.client_edit');
     Route::get('/campaigns/export', [CampaignController::class, 'export'])->name('campaigns.export');
 
-
-
+    Route::post('/change-password', [UsersController::class, 'changePassword'])->name('profile.change-password');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 
 

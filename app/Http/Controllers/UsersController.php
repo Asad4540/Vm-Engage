@@ -111,7 +111,4 @@ class UsersController extends Controller
         return response()->json(['status' => 'success', 'message' => 'User updated successfully']);
     }
 
-
-
-
 }

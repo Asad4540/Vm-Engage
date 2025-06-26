@@ -180,11 +180,14 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Client Access</label>
                             <select class="form-control" name="client_id" id="client_id">
-                                <option value="" disabled selected>--Select Client--</option>
+                                <option value="" disabled>--Select Client--</option>
                                 @foreach ($clients as $client)
-                                    <option value="{{ $client->id }}">{{ $client->name }}</option>
+                                    <option value="{{ $client->id }}" {{ isset($user) && $user->client_id == $client->id ? 'selected' : '' }}>
+                                        {{ $client->name }}
+                                    </option>
                                 @endforeach
                             </select>
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -264,6 +267,7 @@
                     $('#edit-name').val(response.user.name);
                     $('#edit-email').val(response.user.email);
                     $('#edit-role').val(response.user.role_id);
+                    $('#client_id').val(response.user.client_id);
                     $('#editUserModal').modal('show');
                 }
             });

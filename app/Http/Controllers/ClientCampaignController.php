@@ -22,7 +22,6 @@ class ClientCampaignController extends Controller
             $query->where('client_id', $user->client_id);
         }
 
-        // 🔍 Search logic remains unchanged
         if ($request->has('search')) {
             $query->where(function ($q) use ($request) {
                 $q->whereHas('client', function ($clientQuery) use ($request) {

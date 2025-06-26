@@ -22,25 +22,19 @@ class DashboardController extends Controller
             $totalClicks = 0;
             $totalImpressions = 0;
 
-            // Get ALL campaigns (not just latest)
-            $campaigns = Campaign::all();
+            // Get ALL campaigns 
+            $clientId = Auth::user()->client_id;
+
+            $campaigns = Campaign::where('client_id', $clientId)->get();
             $totalAds = $campaigns->count();
 
-            // Calculate totals across ALL campaigns
+
             foreach ($campaigns as $campaign) {
                 $clicksArray = json_decode($campaign->clicks ?? '[]', true);
                 $impressionsArray = json_decode($campaign->impressions ?? '[]', true);
 
                 $totalClicks += is_array($clicksArray) ? array_sum($clicksArray) : 0;
                 $totalImpressions += is_array($impressionsArray) ? array_sum($impressionsArray) : 0;
-            }
-
-            $campaignData = [];
-            $flatData = [];
-
-            foreach ($campaigns as $campaign) {
-                $clicksArray = json_decode($campaign->clicks ?? '[]', true);
-                $impressionsArray = json_decode($campaign->impressions ?? '[]', true);
                 $datesArray = json_decode($campaign->date ?? '[]', true);
 
                 if (!is_array($datesArray) || empty($datesArray)) {

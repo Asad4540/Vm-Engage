@@ -8,8 +8,9 @@
                 <h1 class="cd-title">Profile</h1>
                 <p class="cd-subtitle">Pages / Profile</p>
             </div>
-            <div>
+            <div class="d-flex justify-content-end align-items-center gap-2">
                 <h4>Hello, <strong>{{ Str::before(Auth::user()->name, ' ')}}</strong>!</h4>
+                <img src="images/profile3.png" class="profile-section" alt=""> <a href="{{ route('profile')}}"></a>
             </div>
         </div>
     </section>

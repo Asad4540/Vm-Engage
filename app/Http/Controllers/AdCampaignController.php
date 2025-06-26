@@ -13,21 +13,9 @@ class AdCampaignController extends Controller
 {
     public function index(Request $request)
     {
-        $user = auth()->user(); // Logged-in user
-        $clients = [];
+        $clients = Client::all();
         $query = Campaign::query();
 
-        // If admin or similar, fetch all clients
-        if (in_array($user->role_id, [1, 3])) {
-            $clients = Client::all();
-        }
-
-        // If user is a client, filter by their assigned client_id
-        if ($user->role_id == 2 && $user->client_id) {
-            $query->where('client_id', $user->client_id);
-        }
-
-        // Apply search filter
         if ($request->has('search')) {
             $query->where(function ($q) use ($request) {
                 $q->whereHas('client', function ($clientQuery) use ($request) {
@@ -44,10 +32,10 @@ class AdCampaignController extends Controller
         $campaigns = $query->orderBy('created_at', 'desc')->paginate(6);
 
         if ($request->ajax()) {
-            return view('partials.client_campaign_tbody', compact('campaigns'))->render();
+            return view('partials.campaign_tbody', compact('campaigns'))->render();
         }
 
-        return view('client-campaign', compact('clients', 'campaigns'));
+        return view('ad-campaign', compact('clients', 'campaigns'));
     }
 
 

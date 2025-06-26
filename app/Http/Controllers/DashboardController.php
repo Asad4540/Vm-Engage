@@ -22,30 +22,25 @@ class DashboardController extends Controller
             $totalClicks = 0;
             $totalImpressions = 0;
 
-            // Get ALL campaigns (not just latest)
-            $campaigns = Campaign::all();
+            // Get ALL campaigns 
+            $clientId = Auth::user()->client_id;
+
+            $campaigns = Campaign::where('client_id', $clientId)->get();
             $totalAds = $campaigns->count();
 
-            // Calculate totals across ALL campaigns
+
             foreach ($campaigns as $campaign) {
                 $clicksArray = json_decode($campaign->clicks ?? '[]', true);
                 $impressionsArray = json_decode($campaign->impressions ?? '[]', true);
 
                 $totalClicks += is_array($clicksArray) ? array_sum($clicksArray) : 0;
                 $totalImpressions += is_array($impressionsArray) ? array_sum($impressionsArray) : 0;
-            }
-
-            $campaignData = [];
-            $flatData = [];
-
-            foreach ($campaigns as $campaign) {
-                $clicksArray = json_decode($campaign->clicks ?? '[]', true);
-                $impressionsArray = json_decode($campaign->impressions ?? '[]', true);
                 $datesArray = json_decode($campaign->date ?? '[]', true);
 
                 if (!is_array($datesArray) || empty($datesArray)) {
                     $datesArray = array_fill(0, count($clicksArray), now()->format('Y-m-d'));
                 }
+
 
                 foreach ($clicksArray as $i => $click) {
                     $date = $datesArray[$i] ?? now()->format('Y-m-d');
@@ -80,10 +75,16 @@ class DashboardController extends Controller
                 'December'
             ];
 
-            // Sort $flatData based on defined month order
-            uksort($flatData, function ($a, $b) use ($monthOrder) {
-                return array_search($a, $monthOrder) <=> array_search($b, $monthOrder);
-            });
+            // Ensure $flatData is initialized
+            $flatData = $flatData ?? [];
+
+            // Only sort if $flatData has data
+            if (!empty($flatData)) {
+                // Sort $flatData based on defined month order
+                uksort($flatData, function ($a, $b) use ($monthOrder) {
+                    return array_search($a, $monthOrder) <=> array_search($b, $monthOrder);
+                });
+            }
 
             // Format for frontend chart
             $campaignData = collect($flatData)->map(function ($data, $month) {

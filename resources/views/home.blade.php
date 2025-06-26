@@ -10,7 +10,8 @@
             </div>
             <div class="d-flex justify-content-end align-items-center gap-2">
                 <h4>Hello, <strong>{{ Str::before(Auth::user()->name, ' ')}}</strong>!</h4>
-                <img src="images/profile3.png" class="profile-section" alt=""> <a href="{{ route('profile')}}"></a>
+                <img src="images/profile3.png" class="profile-section " alt=""
+                    onclick="window.location.href='{{ route('profile') }}'">
             </div>
         </div>
     </section>

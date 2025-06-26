@@ -8,12 +8,19 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class CampaignExport implements FromCollection, WithHeadings
 {
+    protected $clientId;
+
+    public function __construct($clientId)
+    {
+        $this->clientId = $clientId;
+    }
+
     /**
      * @return \Illuminate\Support\Collection
      */
     public function collection()
     {
-        return Campaign::all()->map(function ($campaign) {
+        return Campaign::where('client_id', $this->clientId)->get()->map(function ($campaign) {
             return [
                 'Ad Name' => $campaign->ad_name,
                 'Status' => ucfirst($campaign->status),

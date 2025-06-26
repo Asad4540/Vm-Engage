@@ -374,6 +374,7 @@ h4 {
 }
 
 .profile-section{
-    width: 25%;
-    padding-right: 33px;
+    width: 10%;
+    margin-right: 15px;
+    cursor: pointer;
 }

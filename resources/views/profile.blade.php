@@ -8,8 +8,10 @@
                 <h1 class="cd-title">Profile</h1>
                 <p class="cd-subtitle">Pages / Profile</p>
             </div>
-            <div>
-                <h3>Hello, <strong>User</strong>!</h3>
+            <div class="d-flex justify-content-end align-items-center gap-2">
+                <h4>Hello, <strong>{{ Str::before(Auth::user()->name, ' ')}}</strong>!</h4>
+                <img src="images/profile3.png" class="profile-section" alt=""
+                    onclick="window.location.href='{{ route('profile') }}'"> 
             </div>
         </div>
     </section>
@@ -19,24 +21,37 @@
             <div class="border shadow rounded-2 p-5 w-50">
 
                 <div class="text-center">
-                    <form action="">
+                    <form method="POST" action="{{ route('profile.change-password') }}">
+                        @csrf
+                        @if (session('success'))
+                            <div class="alert alert-success">{{ session('success') }}</div>
+                        @endif
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div>
-                            <img src="images/profile-icon.png" alt="" class="w-25">
+                            <img src="images/profile-icon.png" alt="" style="width:20%">
                         </div><br>
-                        <h3>User Name</h3> <br>
+                        <h4>{{ Auth::user()->name }}</h4>
                         <hr>
                         <h5>Change Password</h5> <br>
                         <div>
                             <p>Enter your current password :</p>
-                            <input type="password" class="w-50" name="" id="">
+                            <input type="password" class="w-50" id="" name="current_password" required>
                         </div> <br>
                         <div>
                             <p>Enter new password :</p>
-                            <input type="password" class="w-50" name="" id="">
+                            <input type="password" class="w-50" id="" name="new_password" required>
                         </div> <br>
                         <div>
                             <p>Confirm new password :</p>
-                            <input type="password" class="w-50" name="" id="">
+                            <input type="password" class="w-50" id="" name="new_password_confirmation" required>
                         </div> <br><br>
                         <div class="d-flex justify-content-end gap-2">
                             <button class="btn-secondary-db">Cancel</button>
@@ -46,7 +61,7 @@
                 </div>
 
             </div>
-        <center>
+            <center>
     </section>
 
 

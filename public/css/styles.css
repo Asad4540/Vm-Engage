@@ -384,3 +384,7 @@ h4 {
     padding-left: 10px;
     margin-top: 20px;
  }
+
+.form-cell{
+    width: 30%;
+}

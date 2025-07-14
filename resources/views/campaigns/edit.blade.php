@@ -182,14 +182,14 @@
                                 method="post">
                                 @csrf
 
-                                <div class="mb-3 d-flex align-items-center gap-4 w-25">
+                                <div class="mb-3 d-flex align-items-center gap-4 form-cell">
                                     <label class="form-label fw-semibold">Delivered</label>
                                     <input type="number" step="0.01" name="delivered" id="delivered" class="form-control"
                                         value="{{ old('delivered', $campaign->delivered ?? '') }}" placeholder="75">
                                     %
                                 </div>
 
-                                <div class="mb-3 d-flex align-items-center gap-3 w-25">
+                                <div class="mb-3 d-flex align-items-center gap-3 form-cell">
                                     <label class="form-label fw-semibold">Remaining</label>
                                     <input type="number" step="0.01" name="remaining" id="remaining" class="form-control"
                                         value="{{ old('remaining', $campaign->remaining ?? '') }}" placeholder="25">
@@ -279,14 +279,14 @@
                                 method="post">
                                 @csrf
 
-                                <div class="mb-3 d-flex align-items-center gap-4 w-25">
+                                <div class="mb-3 d-flex align-items-center gap-4 form-cell">
                                     <label class="form-label fw-semibold">Mobile</label>
                                     <input type="number" step="0.01" id="mobile" name="mobile" class="form-control"
                                         value="{{ old('mobile', $campaign->mobile ?? '') }}" placeholder="75">
                                     %
                                 </div>
 
-                                <div class="mb-3 d-flex align-items-center gap-3 w-25">
+                                <div class="mb-3 d-flex align-items-center gap-3 form-cell">
                                     <label class="form-label fw-semibold">Desktop</label>
                                     <input type="number" step="0.01" id="desktop" name="desktop" class="form-control"
                                         value="{{ old('desktop', $campaign->desktop ?? '') }}" placeholder="25">%

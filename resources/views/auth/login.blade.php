@@ -19,6 +19,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-5">
                     <div class="login-card">
+                        <center><img src="images/main-logo.png" class="main-logo" alt=""></center><br>
                         <div class="login-content login-header">
                             <h1 class="login-title">Welcome to VM Engage!</h1>
                             <p class="login-subtitle">Enter your login details below</p>

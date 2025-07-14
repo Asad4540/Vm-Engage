@@ -147,3 +147,7 @@
      border-color: var(--btn-hover);
      color: var(--white-primary);
  }
+
+ .main-logo{
+    width: 50%;
+ }

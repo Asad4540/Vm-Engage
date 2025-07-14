@@ -378,3 +378,9 @@ h4 {
     margin-right: 15px;
     cursor: pointer;
 }
+
+.main-logo{
+    width: 70%;
+    padding-left: 10px;
+    margin-top: 20px;
+ }

@@ -104,7 +104,7 @@
                                 </li>
                                 <li>
                                     <a href="{{ route('ad-campaign') }}"
-                                        class="nav-link {{ Request::Is('ad-campaign*') ? 'active' : '' }} ">
+                                        class="nav-link {{ Request::Is('ad-campaign*','client-campaign*') ? 'active' : '' }} ">
                                         <div class="nav-link-item">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26"
                                                 fill="currentColor" class="">

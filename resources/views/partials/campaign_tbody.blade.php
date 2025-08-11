@@ -1,8 +1,8 @@
 @foreach($campaigns as $campaign)
     <tr>
         <td class="px-5">
-            @if($campaign->ad_preview)
-                <img src="{{ asset('images/ad_preview/' . $campaign->ad_preview) }}" width="80" height="80"
+            @if($campaign->client->logo)
+                <img src="{{ asset('images/client_logos/' . $campaign->client->logo) }}" width="80" height="80"
                     style="object-fit: cover;" alt="Ad Preview">
             @else
                 N/A

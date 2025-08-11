@@ -35,7 +35,7 @@
             <table class="table custom-table table-hover">
                 <thead>
                     <tr>
-                        <th class="px-4">Ad Preview</th>
+                        <th class="px-4">Client Logo</th>
                         <th>Client Name</th>
                         <th>Ad Name</th>
                         <th>Campaign ID</th>

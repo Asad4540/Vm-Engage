@@ -9,12 +9,7 @@
                 <h1 class="cd-title">Ads Campaigns</h1>
                 <p class="cd-subtitle">Pages / Campaigns</p>
             </div>
-            <!-- <div class="search-container">
-                                                                                        <form id="search-form">
-                                                                                            <input type="text" name="search" id="search" class="search-prop" placeholder="search..." />
-                                                                                            <i class="bi bi-search" style="top:42%"></i>
-                                                                                        </form>
-                                                                                    </div> -->
+           
         </div>
         <div class="mt-3">
             <div class="d-flex justify-content-end align-items-center ">
@@ -51,10 +46,10 @@
                 <div class="col-lg-3 border border-2 rounded-3">
                     <div class="m-2 mb-3 text-center ">
                         <div>
-                            <p class="client-cards-heading">Your advertisement </p>
-                            @if($campaign->ad_preview)
+                            <p class="client-cards-heading">Client Logo </p>
+                            @if($campaign->client->logo)
                                 <div class="mt-2">
-                                    <img src="{{ asset('images/ad_preview/' . $campaign->ad_preview) }}" alt="Ad Preview"
+                                    <img src="{{ asset('images/client_logos/' . $campaign->client->logo) }}" alt="Ad Preview"
                                         width="300" height="auto">
                                 </div>
                             @endif
@@ -72,7 +67,7 @@
 
                 <div class="col-lg-5 border border-2 rounded-3">
                     <div class="m-2">
-                        <p class="client-cards-heading">Your Ads Placed on Pages</p>
+                        <p class="client-cards-heading">Ads Placed on Pages</p>
                         <div class="row mx-2">
                             <div class="col-4">
                                 <p class="ads-text">Tech-Properties</p>
@@ -198,7 +193,7 @@
                                 <td>85</td>
                                 <td>3,200</td>
                             </tr>
-                         
+
 
                         </tbody>
                     </table>

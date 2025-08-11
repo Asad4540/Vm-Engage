@@ -32,12 +32,16 @@
         </td>
         <td>
             <div class="d-flex gap-2">
+                <a href="{{ route('campaigns.client_edit', $campaign->hashid) }}">
+                    <img src="images/views.png" alt="Edit" class="client-icon">
+                </a>
+
                 <a href="{{ route('campaigns.edit', $campaign->hashid) }}">
                     <img src="images/edit.png" alt="Edit" class="client-icon">
                 </a>
 
                 <form action="{{ route('campaign.destroy', $campaign->id) }}" method="POST"
-                    onsubmit="return confirm('Are you sure you want to delete this client?');">
+                    onsubmit="return confirm('Are you sure you want to delete this ad-campaign?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" style="border: none; background: none; padding: 0;">

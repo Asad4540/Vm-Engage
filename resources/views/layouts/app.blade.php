@@ -80,7 +80,8 @@
                 <div class="d-flex flex-column align-items-sm-start px-3 pt-2 min-vh-100 sticky">
                     <a href="{{ route('dashboard') }}"
                         class="d-flex align-items-center me-md-auto text-decoration-none">
-                        <img src="images/main-logo.png" class="main-logo" alt=""><br>
+                        <img src="{{ asset('images/main-logo.png') }}" class="main-logo"
+                            alt=""><br>
                         <!-- <h1 class="sidebar-heading">VM Engage</h1> -->
                     </a>
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-sm-start sidebar-links">

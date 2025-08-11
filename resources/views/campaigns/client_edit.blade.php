@@ -10,11 +10,11 @@
                 <p class="cd-subtitle">Pages / Campaigns</p>
             </div>
             <!-- <div class="search-container">
-                <form id="search-form">
-                    <input type="text" name="search" id="search" class="search-prop" placeholder="search..." />
-                    <i class="bi bi-search" style="top:42%"></i>
-                </form>
-            </div> -->
+                                                                                        <form id="search-form">
+                                                                                            <input type="text" name="search" id="search" class="search-prop" placeholder="search..." />
+                                                                                            <i class="bi bi-search" style="top:42%"></i>
+                                                                                        </form>
+                                                                                    </div> -->
         </div>
         <div class="mt-3">
             <div class="d-flex justify-content-end align-items-center ">
@@ -146,24 +146,66 @@
         </section>
 
         <section>
-            <div class="row mt-4 gap-3 justify-content-center">
-                <div class="col-7 border border-2 rounded-3 px-0">
-                    <div class="d-flex mb-2">
-                        <div class="linechart clicks-tab "> <i class="bi bi-check2-square mx-1"></i>Clicks <br>
-                            <span class="d-flex justify-content-center px-5 fw-bold">{{ $campaign->total_clicks }}</span>
-                        </div>
-                        <div class="linechart impressions-tab"><i class="bi bi-check2-square mx-1"></i>Impressions <br>
-                            <span
-                                class="d-flex justify-content-center px-5 fw-bold">{{ $campaign->total_impressions }}</span>
-                        </div>
+            <div class="mt-4 mx-4 border border-2 rounded-3 px-0">
+                <div class="d-flex mb-2">
+                    <div class="linechart clicks-tab "> <i class="bi bi-check2-square mx-1"></i>Clicks <br>
+                        <span class="d-flex justify-content-center px-5 fw-bold">{{ $campaign->total_clicks }}</span>
                     </div>
-                    <div class="px-3">
-                        <canvas id="campaignChart" height="140"></canvas>
+                    <div class="linechart impressions-tab"><i class="bi bi-check2-square mx-1"></i>Impressions <br>
+                        <span class="d-flex justify-content-center px-5 fw-bold">{{ $campaign->total_impressions }}</span>
                     </div>
+                </div>
+                <div class="px-3">
+                    <canvas id="campaignChart" height="80"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="row mt-4 gap-5 justify-content-center">
+                <div class="col-7 px-0 h-100">
+                    <table class="table table-hover custom-table" style="margin-bottom:0 !important">
+                        <thead>
+                            <tr>
+                                <th class="px-4">Ad Preview</th>
+                                <th>Size</th>
+                                <th>Clicks</th>
+                                <th>impressions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="campaigns-container">
+                            <tr>
+                                <td class="px-4"><img src="https://placehold.co/100" alt="Ad 1 Preview"></td>
+                                <td>100x50</td>
+                                <td>120</td>
+                                <td>5,000</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4"><img src="https://placehold.co/100" alt="Ad 2 Preview"></td>
+                                <td>200x100</td>
+                                <td>85</td>
+                                <td>3,200</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4"><img src="https://placehold.co/100" alt="Ad 3 Preview"></td>
+                                <td>300x250</td>
+                                <td>230</td>
+                                <td>10,500</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4"><img src="https://placehold.co/100" alt="Ad 2 Preview"></td>
+                                <td>200x100</td>
+                                <td>85</td>
+                                <td>3,200</td>
+                            </tr>
+                         
+
+                        </tbody>
+                    </table>
                 </div>
 
 
-                <div class="col-4 border border-2 rounded-3">
+                <div class="col-4 border border-2 rounded-3 ">
                     <div class="m-2">
                         <p class="client-cards-heading">Devices </p>
                         <div class="w-full max-w-sm mx-auto">
@@ -174,9 +216,12 @@
             </div>
         </section>
 
+
+
+
         <section>
-            <div class="row mt-4 mx-5 justify-content-center">
-                <div class="col-11 border border-2 rounded-3 ">
+            <div class="row mt-4 mx-4 justify-content-center">
+                <div class="col-12 border border-2 rounded-3 ">
                     <div class="m-2">
                         <p class="client-cards-heading">User by Region </p>
                         <div class="row justify-content-between">
@@ -207,6 +252,8 @@
                 </div>
             </div>
         </section>
+
+
     </section>
 
 

@@ -20,6 +20,8 @@
                         role="tab" aria-controls="tab5" aria-selected="false">Devices</button>
                     <button class="nav-link" id="tab6-tab" data-bs-toggle="pill" data-bs-target="#tab6" type="button"
                         role="tab" aria-controls="tab6" aria-selected="false">User by Region</button>
+                    <button class="nav-link" id="tab7-tab" data-bs-toggle="pill" data-bs-target="#tab7" type="button"
+                        role="tab" aria-controls="tab6" aria-selected="false">Multiple Ads</button>
                 </div>
             </div>
 
@@ -34,29 +36,29 @@
                                 @csrf
 
                                 <!-- Upload Image -->
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
 
-                                    @if($campaign->ad_preview)
-                                        <div class="mt-2">
-                                            <img src="{{ asset('images/ad_preview/' . $campaign->ad_preview) }}"
-                                                alt="Ad Preview" width="80">
-                                        </div>
-                                    @endif
-                                    <br>
+                                                                                @if($campaign->ad_preview)
+                                                                                    <div class="mt-2">
+                                                                                        <img src="{{ asset('images/ad_preview/' . $campaign->ad_preview) }}"
+                                                                                            alt="Ad Preview" width="80">
+                                                                                    </div>
+                                                                                @endif
+                                                                                <br>
 
-                                    <label class="form-label fw-semibold">Ad Preview image</label>
-                                    <div class="border rounded-3 px-2 py-1">
-                                        <div class="d-flex align-items-center gap-1 mt-1">
-                                            <i class="bi bi-image fs-6 text-muted"></i><br>
-                                            <p class="text-muted mb-0">Upload Image to Replace</p>
-                                        </div>
-                                        <input type="file" name="ad_preview" id="upload" class="form-control mt-2"
-                                            accept="image/png, image/jpeg">
-                                    </div>
-                                    <small class="text-muted">Accepted formats: JPG, PNG | Max file size: 5MB | pix :
-                                        40x40</small>
+                                                                                <label class="form-label fw-semibold">Ad Preview image</label>
+                                                                                <div class="border rounded-3 px-2 py-1">
+                                                                                    <div class="d-flex align-items-center gap-1 mt-1">
+                                                                                        <i class="bi bi-image fs-6 text-muted"></i><br>
+                                                                                        <p class="text-muted mb-0">Upload Image to Replace</p>
+                                                                                    </div>
+                                                                                    <input type="file" name="ad_preview" id="upload" class="form-control mt-2"
+                                                                                        accept="image/png, image/jpeg">
+                                                                                </div>
+                                                                                <small class="text-muted">Accepted formats: JPG, PNG | Max file size: 5MB | pix :
+                                                                                    40x40</small>
 
-                                </div>
+                                                                            </div> -->
 
                                 <!-- Client   -->
                                 <div class="mb-3">
@@ -751,6 +753,41 @@
 
 
                     <!-- ------------------------------------------------------------------------------------------------------------------------------ -->
+
+                    <div class="tab-pane fade" id="tab7" role="tabpanel" aria-labelledby="tab7-tab">
+                        <div class="container">
+                            <h2>Multiple Ads Format </h2><br><br>
+
+                            <form
+                                action="{{ isset($campaign) ? route('ad-campaign.update', $campaign->id) : route('ad-campaign.save') }}"
+                                method="post">
+                                @csrf
+
+                                <div id="url-tech-wrapper">
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <input type="file" name="image[]" class="form-control " accept="image/*">
+                                        <input type="text" name="size[]" class="form-control " placeholder="Size">
+                                        <input type="number" name="clicks[]" class="form-control "
+                                            placeholder="Clicks">
+                                        <input type="number" name="impressions[]" class="form-control "
+                                            placeholder="Impressions">
+                                        <i class="bi bi-x-square text-danger" style="cursor: pointer;"></i>
+
+                                    </div>
+                                </div>
+
+                                <!-- Save Button -->
+                                <div class="d-flex justify-content-end mt-5">
+                                    <button type="button" class="btn-secondary-db mx-2" onclick="addUrlField()">Add
+                                        More</button>
+                                    <button type="submit" class="btn-primary-db fw-semibold px-5">Save</button>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- -----------------------------------------------------------------------------------------------------------------------------  -->
                 </div>
             </div>
         </div>

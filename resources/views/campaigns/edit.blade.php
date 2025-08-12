@@ -21,7 +21,9 @@
                     <button class="nav-link" id="tab6-tab" data-bs-toggle="pill" data-bs-target="#tab6" type="button"
                         role="tab" aria-controls="tab6" aria-selected="false">User by Region</button>
                     <button class="nav-link" id="tab7-tab" data-bs-toggle="pill" data-bs-target="#tab7" type="button"
-                        role="tab" aria-controls="tab6" aria-selected="false">Multiple Ads</button>
+                        role="tab" aria-controls="tab8" aria-selected="false">Multiple Ads</button>
+                    <button class="nav-link" id="tab8-tab" data-bs-toggle="pill" data-bs-target="#tab8" type="button"
+                        role="tab" aria-controls="tab8" aria-selected="false">Top Sites</button>
                 </div>
             </div>
 
@@ -34,31 +36,6 @@
                             <form action="{{ url('/ad-campaign/' . $campaign->id . '/update') }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
-
-                                <!-- Upload Image -->
-                                <!-- <div class="mb-3">
-
-                                                                                @if($campaign->ad_preview)
-                                                                                    <div class="mt-2">
-                                                                                        <img src="{{ asset('images/ad_preview/' . $campaign->ad_preview) }}"
-                                                                                            alt="Ad Preview" width="80">
-                                                                                    </div>
-                                                                                @endif
-                                                                                <br>
-
-                                                                                <label class="form-label fw-semibold">Ad Preview image</label>
-                                                                                <div class="border rounded-3 px-2 py-1">
-                                                                                    <div class="d-flex align-items-center gap-1 mt-1">
-                                                                                        <i class="bi bi-image fs-6 text-muted"></i><br>
-                                                                                        <p class="text-muted mb-0">Upload Image to Replace</p>
-                                                                                    </div>
-                                                                                    <input type="file" name="ad_preview" id="upload" class="form-control mt-2"
-                                                                                        accept="image/png, image/jpeg">
-                                                                                </div>
-                                                                                <small class="text-muted">Accepted formats: JPG, PNG | Max file size: 5MB | pix :
-                                                                                    40x40</small>
-
-                                                                            </div> -->
 
                                 <!-- Client   -->
                                 <div class="mb-3">
@@ -245,7 +222,7 @@
 
                                     @foreach ($metricsData as $index => $metric)
                                         <div class="metrics-pair mb-3 align-items-center">
-                                            <input type="month" name="metrics_data[{{ $index }}][date]"
+                                            <input type="date" name="metrics_data[{{ $index }}][date]"
                                                 class="form-control w-25 me-2 d-inline-block"
                                                 value="{{ $metric['date'] ?? '' }}" placeholder="Select Date">
                                             <input type="text" name="metrics_data[{{ $index }}][clicks]"
@@ -760,30 +737,77 @@
 
                             <form
                                 action="{{ isset($campaign) ? route('ad-campaign.update', $campaign->id) : route('ad-campaign.save') }}"
-                                method="post">
+                                method="post" enctype="multipart/form-data">
                                 @csrf
 
-                                <div id="url-tech-wrapper">
+                                <div id="multiple-ads-wrapper">
                                     <div class="d-flex align-items-center gap-3 mb-3">
-                                        <input type="file" name="image[]" class="form-control " accept="image/*">
-                                        <input type="text" name="size[]" class="form-control " placeholder="Size">
-                                        <input type="number" name="clicks[]" class="form-control "
-                                            placeholder="Clicks">
-                                        <input type="number" name="impressions[]" class="form-control "
-                                            placeholder="Impressions">
-                                        <i class="bi bi-x-square text-danger" style="cursor: pointer;"></i>
+                                        <!-- Ad Preview -->
+                                        <input type="file" name="single_adpreview[]" class="form-control w-auto"
+                                            accept="image/*">
 
+                                        <!-- Ad Size -->
+                                        <input type="text" name="single_size[]" class="form-control"
+                                            placeholder="Size (e.g. 300x250)"
+                                            value="{{ old('single_size.0', $campaign->single_size[0] ?? '') }}">
+
+                                        <!-- Clicks -->
+                                        <input type="number" name="single_clicks[]" class="form-control"
+                                            placeholder="Clicks"
+                                            value="{{ old('single_clicks.0', $campaign->single_clicks[0] ?? '') }}">
+
+                                        <!-- Impressions -->
+                                        <input type="number" name="single_impressions[]" class="form-control"
+                                            placeholder="Impressions"
+                                            value="{{ old('single_impressions.0', $campaign->single_impressions[0] ?? '') }}">
+
+                                        <i class="bi bi-x-square text-danger" onclick="removeMultipleAds(this)"
+                                            style="cursor: pointer;"></i>
                                     </div>
                                 </div>
 
                                 <!-- Save Button -->
                                 <div class="d-flex justify-content-end mt-5">
-                                    <button type="button" class="btn-secondary-db mx-2" onclick="addUrlField()">Add
+                                    <button type="button" class="btn-secondary-db mx-2" onclick="AddMultipleAds()">Add
                                         More</button>
                                     <button type="submit" class="btn-primary-db fw-semibold px-5">Save</button>
-
                                 </div>
                             </form>
+
+                        </div>
+                    </div>
+
+                    <!-- -----------------------------------------------------------------------------------------------------------------------------  -->
+
+                    <div class="tab-pane fade" id="tab8" role="tabpanel" aria-labelledby="tab8-tab">
+                        <div class="container">
+                            <h2>Top Sites </h2><br><br>
+
+                            <form
+                                action="{{ isset($campaign) ? route('ad-campaign.update', $campaign->id) : route('ad-campaign.save') }}"
+                                method="post" enctype="multipart/form-data">
+                                @csrf
+
+                                <div id="top-sites-wrapper">
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+
+                                        <!-- add link -->
+                                        <input type="text" name="single_size[]" class="form-control"
+                                            placeholder="www.example.com" value="">
+
+                                        <i class="bi bi-x-square text-danger" onclick="removeTopSites(this)"
+                                            style="cursor: pointer;"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Save Button -->
+                                <div class="d-flex justify-content-end mt-5">
+                                    <button type="button" class="btn-secondary-db mx-2" onclick="addTopSites()">Add
+                                        More</button>
+                                    <button type="submit" class="btn-primary-db fw-semibold px-5">Save</button>
+                                </div>
+                            </form>
+
                         </div>
                     </div>
 
@@ -1111,7 +1135,7 @@
         let div = document.createElement('div');
         div.className = 'metrics-pair mb-3 align-items-center';
         div.innerHTML = `
-        <input type="month" name="metrics_data[${index}][date]" class="form-control w-25 me-2 d-inline-block" placeholder="Date" />
+        <input type="date" name="metrics_data[${index}][date]" class="form-control w-25 me-2 d-inline-block" placeholder="Date" />
         <input type="text" name="metrics_data[${index}][clicks]" class="form-control w-25 me-2 d-inline-block" placeholder="Clicks" />
         <input type="text" name="metrics_data[${index}][impressions]" class="form-control w-25 me-2 d-inline-block" placeholder="Impressions" />
         <i class="bi bi-x-square delete-date text-danger" style="cursor: pointer;"></i>
@@ -1154,6 +1178,50 @@
         linkPercentageInputs("mobile", "desktop");
     });
 
+    function AddMultipleAds() {
+        const wrapper = document.getElementById('multiple-ads-wrapper');
 
+        const fieldHTML = `
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <!-- Ad Preview -->
+            <input type="file" name="single_adpreview[]" class="form-control w-auto" accept="image/*">
+
+            <!-- Ad Size -->
+            <input type="text" name="single_size[]" class="form-control" placeholder="Size (e.g. 300x250)">
+
+            <!-- Clicks -->
+            <input type="number" name="single_clicks[]" class="form-control" placeholder="Clicks" min="0">
+
+            <!-- Impressions -->
+            <input type="number" name="single_impressions[]" class="form-control" placeholder="Impressions" min="0">
+
+            <i class="bi bi-x-square text-danger" onclick="removeMultipleAds(this)" style="cursor: pointer;"></i>
+        </div>
+    `;
+
+        wrapper.insertAdjacentHTML('beforeend', fieldHTML);
+    }
+
+    function removeMultipleAds(button) {
+        button.closest('.d-flex').remove();
+    }
+
+    function addTopSites() {
+        const wrapper = document.getElementById('top-sites-wrapper');
+        const fieldHTML = `
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <!-- add link -->
+            <input type="text" name="single_size[]" class="form-control" placeholder="www.example.com" value="">
+
+            <i class="bi bi-x-square text-danger" onclick="removeTopSites(this)" style="cursor: pointer;"></i>
+        </div>
+    `;
+
+        wrapper.insertAdjacentHTML('beforeend', fieldHTML);
+    }
+
+    function removeTopSites(button) {
+        button.closest('.d-flex').remove();
+    }
 
 </script>

@@ -9,7 +9,7 @@
                 <h1 class="cd-title">Ads Campaigns</h1>
                 <p class="cd-subtitle">Pages / Campaigns</p>
             </div>
-           
+
         </div>
         <div class="mt-3">
             <div class="d-flex justify-content-end align-items-center ">
@@ -211,9 +211,6 @@
             </div>
         </section>
 
-
-
-
         <section>
             <div class="row mt-4 mx-4 justify-content-center">
                 <div class="col-12 border border-2 rounded-3 ">
@@ -243,6 +240,30 @@
                                 </ul>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="row mt-4 mx-4 justify-content-center">
+                <div class="col-12 border border-2 rounded-3 ">
+                    <div class="m-2">
+                        <p class="client-cards-heading">Top Sites</p>
+                        <table class="table table-striped table-bordered table-hover">
+                            <tbody>
+                                <tr>
+                                    <td>https://example.com/mark</a></td>
+                                </tr>
+                                <tr>
+                                    <td>https://example.com/jacob</a></td>
+                                </tr>
+                                <tr>
+                                    <td>https://example.com/larry</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                     </div>
                 </div>
             </div>
@@ -337,7 +358,10 @@
 
         const labels = validChartData.map(item => {
             const date = new Date(item.date);
-            return date.toLocaleDateString('en-GB', { month: 'short' });
+            return date.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'short'
+            });
         });
 
         const clicksData = validChartData.map(item => item.clicks);

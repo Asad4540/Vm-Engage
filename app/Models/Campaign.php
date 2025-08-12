@@ -28,8 +28,16 @@ class Campaign extends Model
         'country',
         'percentage',
         'date',
-
+        'single_adpreview',
+        'single_size',
+        'single_clicks',
+        'single_impressions',
     ];
+
+    protected $casts = [
+        'multiple_ads' => 'array',  // in Campaign model
+    ];
+
 
     // protected $casts = [
     //     'url' => 'array',

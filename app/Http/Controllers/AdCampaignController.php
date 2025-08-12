@@ -47,9 +47,14 @@ class AdCampaignController extends Controller
             'campaign_id' => 'required|string|max:255',
             'campaign_type' => 'required|string|max:255',
             'ad_preview' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+
+            'single_adpreview.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'single_size.*' => 'nullable|string|max:50',
+            'single_clicks.*' => 'nullable|integer|min:0',
+            'single_impressions.*' => 'nullable|integer|min:0',
         ]);
 
-        // Handle file upload
+        // Handle main ad_preview file upload if any
         if ($request->hasFile('ad_preview')) {
             $file = $request->file('ad_preview');
             $fileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
@@ -63,9 +68,42 @@ class AdCampaignController extends Controller
             $data['ad_preview'] = $fileName;
         }
 
+        // Handle multiple ads uploads and data
+        $multipleAds = [];
+        if ($request->has('single_size')) {
+            foreach ($request->single_size as $index => $size) {
+                $adPreviewFileName = null;
+
+                if ($request->hasFile("single_adpreview.$index")) {
+                    $file = $request->file("single_adpreview.$index");
+                    $adPreviewFileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+
+                    $uploadPath = public_path('images/single_adpreview');
+                    if (!file_exists($uploadPath)) {
+                        mkdir($uploadPath, 0755, true);
+                    }
+
+                    $file->move($uploadPath, $adPreviewFileName);
+                }
+
+                $multipleAds[] = [
+                    'single_adpreview' => $adPreviewFileName,
+                    'single_size' => $size,
+                    'single_clicks' => $request->single_clicks[$index] ?? 0,
+                    'single_impressions' => $request->single_impressions[$index] ?? 0,
+                ];
+            }
+        }
+
+
+
+        $data['multiple_ads'] = json_encode($multipleAds);
         Campaign::create($data);
+
         return redirect()->route('ad-campaign')->with('success', 'Campaign added successfully!');
     }
+
+
 
     public function destroy($id)
     {
@@ -77,6 +115,12 @@ class AdCampaignController extends Controller
                 unlink($adPreviewPath); // delete the image file
             }
         }
+
+        // Remove single_adpreview file
+        if ($campaign->single_adpreview && file_exists(public_path('images/single_adpreview/' . $campaign->single_adpreview))) {
+            unlink(public_path('images/single_adpreview/' . $campaign->single_adpreview));
+        }
+
         $campaign->delete();
 
         return redirect()->route('ad-campaign')->with('success', 'Client deleted successfully.');
@@ -105,14 +149,19 @@ class AdCampaignController extends Controller
 
     public function update(Request $request, Campaign $campaign)
     {
-
-        $request->validate([
+        $data = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'ad_name' => 'required|string|max:255',
             'campaign_id' => 'required|string|max:255',
             'campaign_type' => 'required|string|max:255',
-            'ad_preview' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'status' => 'required|in:active,pending,paused,completed',
+            'ad_preview' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+
+            'single_adpreview.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'single_size.*' => 'nullable|string|max:50',
+            'single_clicks.*' => 'nullable|integer|min:0',
+            'single_impressions.*' => 'nullable|integer|min:0',
+
             'clicks' => 'nullable|string|max:255',
             'impressions' => 'nullable|string|max:255',
             'delivered' => 'nullable|numeric',
@@ -122,112 +171,80 @@ class AdCampaignController extends Controller
             'country' => 'nullable|array',
             'percentage' => 'nullable|array',
             'date' => 'nullable|array',
-
-
-
         ]);
 
+        // Handle main ad_preview file upload and delete old if exists
         if ($request->hasFile('ad_preview')) {
-            // Delete old logo if exists
             if ($campaign->ad_preview && file_exists(public_path('images/ad_preview/' . $campaign->ad_preview))) {
                 unlink(public_path('images/ad_preview/' . $campaign->ad_preview));
             }
-
-            $ad_preview = $request->file('ad_preview');
-            $ad_previewName = time() . '_' . $ad_preview->getClientOriginalName();
-
-            // Move new ad_preview to public/images/ad_preview/
-            $ad_preview->move(public_path('images/ad_preview'), $ad_previewName);
-
-            $campaign->ad_preview = $ad_previewName;
+            $file = $request->file('ad_preview');
+            $fileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+            $file->move(public_path('images/ad_preview'), $fileName);
+            $campaign->ad_preview = $fileName;
         }
 
-        $campaign->client_id = $request->client_id;
-        $campaign->ad_name = $request->ad_name;
-        $campaign->campaign_id = $request->campaign_id;
-        $campaign->campaign_type = $request->campaign_type;
-        $campaign->status = $request->status;
+        // Process multiple ads inputs
+        $multipleAds = [];
 
+        // Get old multiple_ads to delete old images if replaced
+        $oldMultipleAds = $campaign->multiple_ads ?? [];
 
-        if ($request->has('url_data')) {
-            $urlData = $request->input('url_data', []);
-            $urlMap = [];
+        if ($request->has('single_size')) {
+            foreach ($request->single_size as $index => $size) {
+                $adPreviewFileName = $oldMultipleAds[$index]['single_adpreview'] ?? null;
 
-            foreach ($urlData as $item) {
-                if (!empty($item['tech_prop_id']) && !empty($item['url'])) {
-                    $urlMap[] = [
-                        'tech_prop_id' => $item['tech_prop_id'],
-                        'url' => $item['url'],
-                    ];
-                }
-            }
+                // If new file uploaded for this index, delete old file and save new one
+                if ($request->hasFile("single_adpreview.$index")) {
+                    if ($adPreviewFileName && file_exists(public_path('images/single_adpreview/' . $adPreviewFileName))) {
+                        unlink(public_path('images/single_adpreview/' . $adPreviewFileName));
+                    }
 
-            $campaign->url = json_encode($urlMap);
-        }
+                    $file = $request->file("single_adpreview.$index");
+                    $adPreviewFileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
 
-        if ($request->has('region_data')) {
-            $regionData = $request->input('region_data', []);
-            $countries = [];
-            $percentages = [];
+                    $uploadPath = public_path('images/single_adpreview');
+                    if (!file_exists($uploadPath)) {
+                        mkdir($uploadPath, 0755, true);
+                    }
 
-            foreach ($regionData as $item) {
-                if (!empty($item['country']) && !empty($item['percentage'])) {
-                    $countries[] = $item['country'];
-                    $percentages[] = $item['percentage'];
-                }
-            }
-
-            $campaign->country = json_encode($countries);
-            $campaign->percentage = json_encode($percentages);
-        }
-
-
-        if ($request->has('metrics_data')) {
-            $metricsData = $request->input('metrics_data', []);
-            $date = [];
-            $clicks = [];
-            $impressions = [];
-
-            foreach ($metricsData as $item) {
-                // Skip completely empty rows
-                if (empty($item['date']) && empty($item['clicks']) && empty($item['impressions'])) {
-                    continue;
+                    $file->move($uploadPath, $adPreviewFileName);
                 }
 
-                // Use null for empty individual fields
-                $date[] = $item['date'] ?? null;
-                $clicks[] = $item['clicks'] ?? null;
-                $impressions[] = $item['impressions'] ?? null;
-            }
-
-            // Only update if we have at least one valid row
-            if (!empty($date) || !empty($clicks) || !empty($impressions)) {
-                $campaign->date = !empty($date) ? json_encode($date) : null;
-                $campaign->clicks = !empty($clicks) ? json_encode($clicks) : null;
-                $campaign->impressions = !empty($impressions) ? json_encode($impressions) : null;
+                $multipleAds[] = [
+                    'single_adpreview' => $adPreviewFileName,
+                    'single_size' => $size,
+                    'single_clicks' => $request->single_clicks[$index] ?? 0,
+                    'single_impressions' => $request->single_impressions[$index] ?? 0,
+                ];
             }
         }
 
+        $campaign->multiple_ads = json_encode($multipleAds);
 
-        if ($request->has('delivered') && ('remaining')) {
-            $campaign->delivered = $request->input('delivered');
-            $campaign->remaining = $request->input('remaining');
-        }
+        // Update other fields
+        $campaign->client_id = $data['client_id'];
+        $campaign->ad_name = $data['ad_name'];
+        $campaign->campaign_id = $data['campaign_id'];
+        $campaign->campaign_type = $data['campaign_type'];
+        $campaign->status = $data['status'];
 
-        if ($request->has('clicks') && ('impressions')) {
-            $campaign->clicks = $request->input('clicks');
-            $campaign->impressions = $request->input('impressions');
-        }
-
-        if ($request->has('mobile') && ('desktop')) {
-            $campaign->mobile = $request->input('mobile');
-            $campaign->desktop = $request->input('desktop');
-        }
+        // Optional fields
+        $campaign->clicks = $data['clicks'] ?? $campaign->clicks;
+        $campaign->impressions = $data['impressions'] ?? $campaign->impressions;
+        $campaign->delivered = $data['delivered'] ?? $campaign->delivered;
+        $campaign->remaining = $data['remaining'] ?? $campaign->remaining;
+        $campaign->mobile = $data['mobile'] ?? $campaign->mobile;
+        $campaign->desktop = $data['desktop'] ?? $campaign->desktop;
+        $campaign->country = isset($data['country']) ? json_encode($data['country']) : $campaign->country;
+        $campaign->percentage = isset($data['percentage']) ? json_encode($data['percentage']) : $campaign->percentage;
+        $campaign->date = isset($data['date']) ? json_encode($data['date']) : $campaign->date;
 
         $campaign->save();
 
         return redirect()->route('ad-campaign')->with('success', 'Campaign updated successfully.');
     }
+
 
     public function save(Request $request, Campaign $campaign = null)
     {
@@ -247,17 +264,65 @@ class AdCampaignController extends Controller
             'percentage' => 'nullable|array',
             'date' => 'nullable|array',
 
-
+            'single_adpreview.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'single_size.*' => 'nullable|string|max:50',
+            'single_clicks.*' => 'nullable|integer|min:0',
+            'single_impressions.*' => 'nullable|integer|min:0',
 
         ];
 
         $data = $request->validate($rules);
 
+        $multipleAds = [];
+        if ($request->has('single_size')) {
+            foreach ($request->single_size as $index => $size) {
+                $adPreviewFileName = null;
+
+                if ($request->hasFile("single_adpreview.$index")) {
+                    $file = $request->file("single_adpreview.$index");
+                    $adPreviewFileName = time() . '_' . $index . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+
+                    $uploadPath = public_path('images/single_adpreview');
+                    if (!file_exists($uploadPath)) {
+                        mkdir($uploadPath, 0755, true);
+                    }
+
+                    $file->move($uploadPath, $adPreviewFileName);
+                }
+
+                $multipleAds[] = [
+                    'single_adpreview' => $adPreviewFileName,
+                    'single_size' => $size,
+                    'single_clicks' => $request->single_clicks[$index] ?? 0,
+                    'single_impressions' => $request->single_impressions[$index] ?? 0,
+                ];
+            }
+        }
+
+        $data['multiple_ads'] = !empty($multipleAds) ? json_encode($multipleAds) : null;
+        
+        // Handle single_adpreview upload
+        if ($request->hasFile('single_adpreview')) {
+            // If updating, delete old file
+            if ($campaign && $campaign->single_adpreview && file_exists(public_path('images/single_adpreview/' . $campaign->single_adpreview))) {
+                unlink(public_path('images/single_adpreview/' . $campaign->single_adpreview));
+            }
+
+            $file = $request->file('single_adpreview');
+            $fileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+
+            $uploadPath = public_path('images/single_adpreview');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+
+            $file->move($uploadPath, $fileName);
+            $data['single_adpreview'] = $fileName;
+        }
+
         if ($request->has('url_data')) {
             $urlData = $request->input('url_data', []);
             $urlMap = [];
-
-
 
             foreach ($urlData as $item) {
                 if (!empty($item['tech_prop_id']) && !empty($item['url'])) {

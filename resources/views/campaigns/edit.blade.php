@@ -741,29 +741,74 @@
                                 @csrf
 
                                 <div id="multiple-ads-wrapper">
-                                    <div class="d-flex align-items-center gap-3 mb-3">
-                                        <!-- Ad Preview -->
-                                        <input type="file" name="single_adpreview[]" class="form-control w-auto"
-                                            accept="image/*">
+                                    @php
+                                        // Initialize arrays with empty array as fallback
+                                        $single_adpreview = old('single_adpreview', isset($campaign) ? (json_decode($campaign->single_adpreview, true) ?? []) : []);
+                                        $single_size = old('single_size', isset($campaign) ? (json_decode($campaign->single_size, true) ?? []) : []);
+                                        $single_clicks = old('single_clicks', isset($campaign) ? (json_decode($campaign->single_clicks, true) ?? []) : []);
+                                        $single_impressions = old('single_impressions', isset($campaign) ? (json_decode($campaign->single_impressions, true) ?? []) : []);
 
-                                        <!-- Ad Size -->
-                                        <input type="text" name="single_size[]" class="form-control"
-                                            placeholder="Size (e.g. 300x250)"
-                                            value="{{ old('single_size.0', $campaign->single_size[0] ?? '') }}">
+                                        // Ensure all variables are arrays
+                                        $single_adpreview = is_array($single_adpreview) ? $single_adpreview : [];
+                                        $single_size = is_array($single_size) ? $single_size : [];
+                                        $single_clicks = is_array($single_clicks) ? $single_clicks : [];
+                                        $single_impressions = is_array($single_impressions) ? $single_impressions : [];
 
-                                        <!-- Clicks -->
-                                        <input type="number" name="single_clicks[]" class="form-control"
-                                            placeholder="Clicks"
-                                            value="{{ old('single_clicks.0', $campaign->single_clicks[0] ?? '') }}">
+                                        // Determine the maximum count
+                                        $maxCount = max(
+                                            count($single_adpreview),
+                                            count($single_size),
+                                            count($single_clicks),
+                                            count($single_impressions)
+                                        );
+                                    @endphp
 
-                                        <!-- Impressions -->
-                                        <input type="number" name="single_impressions[]" class="form-control"
-                                            placeholder="Impressions"
-                                            value="{{ old('single_impressions.0', $campaign->single_impressions[0] ?? '') }}">
+                                    @if($maxCount > 0)
+                                        @for($i = 0; $i < $maxCount; $i++)
+                                            <div class="d-flex align-items-center gap-3 mb-3 multiple-ads-item">
+                                                <!-- Ad Preview -->
+                                                <input type="file" name="single_adpreview[]" class="form-control w-auto"
+                                                    accept="image/*">
 
-                                        <i class="bi bi-x-square text-danger" onclick="removeMultipleAds(this)"
-                                            style="cursor: pointer;"></i>
-                                    </div>
+                                                <!-- Ad Size -->
+                                                <input type="text" name="single_size[]" class="form-control"
+                                                    placeholder="Size (e.g. 300x250)" value="{{ $single_size[$i] ?? '' }}">
+
+                                                <!-- Clicks -->
+                                                <input type="number" name="single_clicks[]" class="form-control"
+                                                    placeholder="Clicks" value="{{ $single_clicks[$i] ?? '' }}">
+
+                                                <!-- Impressions -->
+                                                <input type="number" name="single_impressions[]" class="form-control"
+                                                    placeholder="Impressions" value="{{ $single_impressions[$i] ?? '' }}">
+
+                                                <i class="bi bi-x-square text-danger" onclick="removeMultipleAds(this)"
+                                                    style="cursor: pointer;"></i>
+                                            </div>
+                                        @endfor
+                                    @else
+                                        <!-- Empty field if no data -->
+                                        <div class="d-flex align-items-center gap-3 mb-3 multiple-ads-item">
+                                            <!-- Ad Preview -->
+                                            <input type="file" name="single_adpreview[]" class="form-control w-auto"
+                                                accept="image/*">
+
+                                            <!-- Ad Size -->
+                                            <input type="text" name="single_size[]" class="form-control"
+                                                placeholder="Size (e.g. 300x250)">
+
+                                            <!-- Clicks -->
+                                            <input type="number" name="single_clicks[]" class="form-control"
+                                                placeholder="Clicks">
+
+                                            <!-- Impressions -->
+                                            <input type="number" name="single_impressions[]" class="form-control"
+                                                placeholder="Impressions">
+
+                                            <i class="bi bi-x-square text-danger" onclick="removeMultipleAds(this)"
+                                                style="cursor: pointer;"></i>
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <!-- Save Button -->
@@ -789,15 +834,29 @@
                                 @csrf
 
                                 <div id="top-sites-wrapper">
-                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                    @php
+                                        // If editing, get top_sites as an array
+                                        $topSites = old('top_sites', isset($campaign) ? json_decode($campaign->top_sites, true) : []);
+                                    @endphp
 
-                                        <!-- add link -->
-                                        <input type="text" name="top_sites[]" class="form-control"
-                                            placeholder="www.example.com" value="">
-
-                                        <i class="bi bi-x-square text-danger" onclick="removeTopSites(this)"
-                                            style="cursor: pointer;"></i>
-                                    </div>
+                                    @if(!empty($topSites))
+                                        @foreach($topSites as $site)
+                                            <div class="d-flex align-items-center gap-3 mb-3 top-site-item">
+                                                <input type="text" name="top_sites[]" class="form-control"
+                                                    placeholder="www.example.com" value="{{ $site }}">
+                                                <i class="bi bi-x-square text-danger" onclick="removeTopSites(this)"
+                                                    style="cursor: pointer;"></i>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <!-- Empty field if no data -->
+                                        <div class="d-flex align-items-center gap-3 mb-3 top-site-item">
+                                            <input type="text" name="top_sites[]" class="form-control"
+                                                placeholder="www.example.com" value="">
+                                            <i class="bi bi-x-square text-danger" onclick="removeTopSites(this)"
+                                                style="cursor: pointer;"></i>
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <!-- Save Button -->
@@ -1202,8 +1261,11 @@
         wrapper.insertAdjacentHTML('beforeend', fieldHTML);
     }
 
-    function removeMultipleAds(button) {
-        button.closest('.d-flex').remove();
+    function removeMultipleAds(element) {
+        const item = element.closest('.multiple-ads-item');
+        if (item && document.querySelectorAll('.multiple-ads-item').length > 1) {
+            item.remove();
+        }
     }
 
     function addTopSites() {

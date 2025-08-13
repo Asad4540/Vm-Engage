@@ -104,7 +104,9 @@ class ClientCampaignController extends Controller
             }
         }
 
+        $top_sites = json_decode($campaign->top_sites, true); 
 
-        return view('campaigns.client_edit', compact('campaign', 'clients', 'tech_properties', 'deviceData', 'campaignData', 'topCountries'));
+
+        return view('campaigns.client_edit', compact('campaign', 'clients', 'tech_properties', 'deviceData', 'campaignData', 'topCountries','top_sites'));
     }
 }

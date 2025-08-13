@@ -54,7 +54,7 @@ class AdCampaignController extends Controller
             'single_impressions.*' => 'nullable|integer|min:0',
 
             'top_sites' => 'nullable|array',
-            'top_sites.*' => 'nullable|url'
+            'top_sites.*' => 'nullable'
         ]);
 
         // Handle main ad_preview file upload if any
@@ -99,8 +99,11 @@ class AdCampaignController extends Controller
         }
 
 
-        $data['top_sites'] = $request->filled('top_sites') ? json_encode($request->top_sites) : null;
-        $data['multiple_ads'] = json_encode($multipleAds);
+        $data['top_sites'] = $request->filled('top_sites') ? array_filter($request->top_sites) : null;
+        $data['multiple_ads'] = $multipleAds;
+        // Debug output
+        dd($request->top_sites, $data);
+
         Campaign::create($data);
 
         return redirect()->route('ad-campaign')->with('success', 'Campaign added successfully!');
@@ -148,10 +151,9 @@ class AdCampaignController extends Controller
     }
 
 
-
-
     public function update(Request $request, Campaign $campaign)
     {
+        dd('UPDATE METHOD HIT', $request->all());
         $data = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'ad_name' => 'required|string|max:255',
@@ -176,7 +178,7 @@ class AdCampaignController extends Controller
             'date' => 'nullable|array',
 
             'top_sites' => 'nullable|array',
-            'top_sites.*' => 'nullable|url'
+            'top_sites.*' => 'nullable'
         ]);
 
         // Handle main ad_preview file upload and delete old if exists
@@ -226,8 +228,9 @@ class AdCampaignController extends Controller
             }
         }
 
-        $campaign->multiple_ads = json_encode($multipleAds);
-        $campaign->top_sites = $request->filled('top_sites') ? json_encode($request->top_sites) : null;
+        $data['multiple_ads'] = $multipleAds;
+        $data['top_sites'] = $request->filled('top_sites') ? array_filter($request->top_sites) : null;
+
 
         // Update other fields
         $campaign->client_id = $data['client_id'];
@@ -235,6 +238,9 @@ class AdCampaignController extends Controller
         $campaign->campaign_id = $data['campaign_id'];
         $campaign->campaign_type = $data['campaign_type'];
         $campaign->status = $data['status'];
+
+        $campaign->multiple_ads = $data['multiple_ads']; // ✅ now saving
+        $campaign->top_sites = $data['top_sites'];
 
         // Optional fields
         $campaign->clicks = $data['clicks'] ?? $campaign->clicks;
@@ -255,7 +261,6 @@ class AdCampaignController extends Controller
 
     public function save(Request $request, Campaign $campaign = null)
     {
-
         $rules = [
             'tech_prop_id' => 'nullable|array',
             'tech_prop_id.*' => 'exists:tech_properties,id',
@@ -277,7 +282,7 @@ class AdCampaignController extends Controller
             'single_impressions.*' => 'nullable|integer|min:0',
 
             'top_sites' => 'nullable|array',
-            'top_sites.*' => 'nullable|string|url',
+            'top_sites.*' => 'nullable|string',
 
         ];
 
@@ -309,14 +314,11 @@ class AdCampaignController extends Controller
             }
         }
 
-        $data['multiple_ads'] = !empty($multipleAds) ? json_encode($multipleAds) : null;
+        $data['multiple_ads'] = !empty($multipleAds) ? $multipleAds : null;
 
         if ($request->has('top_sites')) {
-            // Remove any empty values
-            $topSites = array_filter($request->top_sites, function ($site) {
-                return !empty($site);
-            });
-            $data['top_sites'] = !empty($topSites) ? json_encode(array_values($topSites)) : null;
+            $topSites = array_filter($request->top_sites, fn($site) => !empty($site));
+            $data['top_sites'] = !empty($topSites) ? array_values($topSites) : null;
         }
 
         // Handle single_adpreview upload

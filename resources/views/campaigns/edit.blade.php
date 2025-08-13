@@ -792,7 +792,7 @@
                                     <div class="d-flex align-items-center gap-3 mb-3">
 
                                         <!-- add link -->
-                                        <input type="text" name="single_size[]" class="form-control"
+                                        <input type="text" name="top_sites[]" class="form-control"
                                             placeholder="www.example.com" value="">
 
                                         <i class="bi bi-x-square text-danger" onclick="removeTopSites(this)"
@@ -1211,7 +1211,7 @@
         const fieldHTML = `
         <div class="d-flex align-items-center gap-3 mb-3">
             <!-- add link -->
-            <input type="text" name="single_size[]" class="form-control" placeholder="www.example.com" value="">
+            <input type="text" name="top_sites[]" class="form-control" placeholder="www.example.com" value="">
 
             <i class="bi bi-x-square text-danger" onclick="removeTopSites(this)" style="cursor: pointer;"></i>
         </div>

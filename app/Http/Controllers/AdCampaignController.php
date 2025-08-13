@@ -52,6 +52,9 @@ class AdCampaignController extends Controller
             'single_size.*' => 'nullable|string|max:50',
             'single_clicks.*' => 'nullable|integer|min:0',
             'single_impressions.*' => 'nullable|integer|min:0',
+
+            'top_sites' => 'nullable|array',
+            'top_sites.*' => 'nullable|url'
         ]);
 
         // Handle main ad_preview file upload if any
@@ -96,7 +99,7 @@ class AdCampaignController extends Controller
         }
 
 
-
+        $data['top_sites'] = $request->filled('top_sites') ? json_encode($request->top_sites) : null;
         $data['multiple_ads'] = json_encode($multipleAds);
         Campaign::create($data);
 
@@ -171,6 +174,9 @@ class AdCampaignController extends Controller
             'country' => 'nullable|array',
             'percentage' => 'nullable|array',
             'date' => 'nullable|array',
+
+            'top_sites' => 'nullable|array',
+            'top_sites.*' => 'nullable|url'
         ]);
 
         // Handle main ad_preview file upload and delete old if exists
@@ -221,6 +227,7 @@ class AdCampaignController extends Controller
         }
 
         $campaign->multiple_ads = json_encode($multipleAds);
+        $campaign->top_sites = $request->filled('top_sites') ? json_encode($request->top_sites) : null;
 
         // Update other fields
         $campaign->client_id = $data['client_id'];
@@ -269,6 +276,9 @@ class AdCampaignController extends Controller
             'single_clicks.*' => 'nullable|integer|min:0',
             'single_impressions.*' => 'nullable|integer|min:0',
 
+            'top_sites' => 'nullable|array',
+            'top_sites.*' => 'nullable|string|url',
+
         ];
 
         $data = $request->validate($rules);
@@ -300,7 +310,15 @@ class AdCampaignController extends Controller
         }
 
         $data['multiple_ads'] = !empty($multipleAds) ? json_encode($multipleAds) : null;
-        
+
+        if ($request->has('top_sites')) {
+            // Remove any empty values
+            $topSites = array_filter($request->top_sites, function ($site) {
+                return !empty($site);
+            });
+            $data['top_sites'] = !empty($topSites) ? json_encode(array_values($topSites)) : null;
+        }
+
         // Handle single_adpreview upload
         if ($request->hasFile('single_adpreview')) {
             // If updating, delete old file

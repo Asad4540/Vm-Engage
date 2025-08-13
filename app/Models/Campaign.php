@@ -32,10 +32,12 @@ class Campaign extends Model
         'single_size',
         'single_clicks',
         'single_impressions',
+        // 'top_sites',
     ];
 
     protected $casts = [
         'multiple_ads' => 'array',  // in Campaign model
+        'top_sites' => 'array',
     ];
 
 

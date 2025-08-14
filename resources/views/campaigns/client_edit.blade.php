@@ -165,36 +165,46 @@
                                 <th class="px-4">Ad Preview</th>
                                 <th>Size</th>
                                 <th>Clicks</th>
-                                <th>impressions</th>
+                                <th>Impressions</th>
                             </tr>
                         </thead>
                         <tbody class="campaigns-container">
-                            <tr>
-                                <td class="px-4"><img src="https://placehold.co/100" alt="Ad 1 Preview"></td>
-                                <td>100x50</td>
-                                <td>120</td>
-                                <td>5,000</td>
-                            </tr>
-                            <tr>
-                                <td class="px-4"><img src="https://placehold.co/100" alt="Ad 2 Preview"></td>
-                                <td>200x100</td>
-                                <td>85</td>
-                                <td>3,200</td>
-                            </tr>
-                            <tr>
-                                <td class="px-4"><img src="https://placehold.co/100" alt="Ad 3 Preview"></td>
-                                <td>300x250</td>
-                                <td>230</td>
-                                <td>10,500</td>
-                            </tr>
-                            <tr>
-                                <td class="px-4"><img src="https://placehold.co/100" alt="Ad 2 Preview"></td>
-                                <td>200x100</td>
-                                <td>85</td>
-                                <td>3,200</td>
-                            </tr>
+                            @php
+                                // Decode the JSON arrays from the campaign
+                                $adPreviews = isset($campaign) ? json_decode($campaign->single_adpreview, true) ?? [] : [];
+                                $sizes = isset($campaign) ? json_decode($campaign->single_size, true) ?? [] : [];
+                                $clicks = isset($campaign) ? json_decode($campaign->single_clicks, true) ?? [] : [];
+                                $impressions = isset($campaign) ? json_decode($campaign->single_impressions, true) ?? [] : [];
 
+                                // Get the maximum count of items
+                                $itemCount = max(
+                                    count($adPreviews),
+                                    count($sizes),
+                                    count($clicks),
+                                    count($impressions)
+                                );
+                            @endphp
 
+                            @for($i = 0; $i < $itemCount; $i++)
+                                <tr>
+                                    <td class="px-4">
+                                        @if(!empty($adPreviews[$i]) && file_exists(public_path($adPreviews[$i])))
+                                            <img src="{{ asset($adPreviews[$i]) }}" alt="Ad Preview" style="max-width: 100px;">
+                                        @else
+                                            <img src="https://placehold.co/100" alt="No Preview" style="max-width: 100px;">
+                                        @endif
+                                    </td>
+                                    <td>{{ $sizes[$i] ?? 'N/A' }}</td>
+                                    <td>{{ number_format($clicks[$i] ?? 0) }}</td>
+                                    <td>{{ number_format($impressions[$i] ?? 0) }}</td>
+                                </tr>
+                            @endfor
+
+                            @if($itemCount === 0)
+                                <tr>
+                                    <td colspan="4" class="text-center">No ad data available</td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -246,21 +256,25 @@
         </section>
 
         <section>
-            <div class="row mt-4 mx-4 justify-content-center">
+            <div class="row mt-4 mx-4 ">
                 <div class="col-12 border border-2 rounded-3 ">
                     <div class="m-2">
                         <p class="client-cards-heading">Top Sites</p>
-                        <table class="table table-striped table-bordered table-hover">
+                        <table class="table table-bordered table-hover">
                             <tbody>
-                                <tr>
-                                    <td>https://example.com/mark</a></td>
-                                </tr>
-                                <tr>
-                                    <td>https://example.com/jacob</a></td>
-                                </tr>
-                                <tr>
-                                    <td>https://example.com/larry</a></td>
-                                </tr>
+                                @if(!empty($top_sites) && (is_array($top_sites) || is_object($top_sites)))
+                                    @foreach ($top_sites as $site)
+                                        <tr>
+                                            <td>
+                                                <a href="{{ $site }}" target="_blank">{{ $site }}</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td class="text-center text-muted">No sites available</td>
+                                    </tr>
+                                @endif
                             </tbody>
                         </table>
 

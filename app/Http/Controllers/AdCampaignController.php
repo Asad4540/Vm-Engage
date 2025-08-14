@@ -171,7 +171,7 @@ class AdCampaignController extends Controller
         $campaign->country = isset($data['country']) ? json_encode($data['country']) : $campaign->country;
         $campaign->percentage = isset($data['percentage']) ? json_encode($data['percentage']) : $campaign->percentage;
         $campaign->date = isset($data['date']) ? json_encode($data['date']) : $campaign->date;
-        $campaign->multiple_ads = !empty($multipleAds) ? json_encode($multipleAds, JSON_UNESCAPED_SLASHES) : null;
+        // $campaign->multiple_ads = !empty($multipleAds) ? json_encode($multipleAds, JSON_UNESCAPED_SLASHES) : null;
         $campaign->single_adpreview = !empty($singleAdPreviews) ? json_encode($singleAdPreviews, JSON_UNESCAPED_SLASHES) : null;
 
         $campaign->save();
@@ -240,11 +240,10 @@ class AdCampaignController extends Controller
         }
 
         // Store in database
-        $data['multiple_ads'] = !empty($multipleAds) ? json_encode($multipleAds, JSON_UNESCAPED_SLASHES) : null;
+        // $data['multiple_ads'] = !empty($multipleAds) ? json_encode($multipleAds) : null;
 
         $filteredAdPreviews = array_filter($singleAdPreviews, fn($v) => !is_null($v));
-        $data['single_adpreview'] = !empty($filteredAdPreviews) ? json_encode($filteredAdPreviews, JSON_UNESCAPED_SLASHES) : null;
-
+        $data['single_adpreview'] = !empty($filteredAdPreviews) ? json_encode($filteredAdPreviews) : null;
 
         if ($request->has('top_sites')) {
             $topSites = array_filter($request->top_sites, fn($site) => !empty($site));

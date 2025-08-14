@@ -767,8 +767,23 @@
                                         @for($i = 0; $i < $maxCount; $i++)
                                             <div class="d-flex align-items-center gap-3 mb-3 multiple-ads-item">
                                                 <!-- Ad Preview -->
-                                                <input type="file" name="single_adpreview[]" class="form-control w-auto"
-                                                    accept="image/*">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="file" name="single_adpreview[]" class="form-control w-auto"
+                                                        accept="image/*">
+
+                                                    {{-- Show current image --}}
+                                                    @if(!empty($single_adpreview[$i]))
+                                                        <div style="width: 60px;">
+                                                            <img src="{{ asset($single_adpreview[$i]) }}" alt="Ad Image"
+                                                                style="width: 100%;">
+                                                        </div>
+                                                        {{-- Hidden input to pass old image path --}}
+                                                        <input type="hidden" name="existing_single_adpreview[]"
+                                                            value="{{ $single_adpreview[$i] }}">
+                                                    @else
+                                                        <input type="hidden" name="existing_single_adpreview[]" value="">
+                                                    @endif
+                                                </div>
 
                                                 <!-- Ad Size -->
                                                 <input type="text" name="single_size[]" class="form-control"

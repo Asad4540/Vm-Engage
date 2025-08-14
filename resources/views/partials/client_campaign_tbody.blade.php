@@ -1,13 +1,13 @@
 @foreach($campaigns as $campaign)
     <tr>
-        <td class="px-5">
+        <!-- <td class="px-5">
             @if($campaign->ad_preview)
                 <img src="{{ asset('images/ad_preview/' . $campaign->ad_preview) }}" width="100" height="100"
                     style="object-fit: cover;" alt="Ad Preview">
             @else
                 N/A
             @endif
-        </td>
+        </td> -->
         <!-- <td class="py-4">{{ $campaign->client->name ?? 'No Client' }}</td> -->
         <td class="py-4">{{ $campaign->ad_name }}</td>
         <td class="py-4">

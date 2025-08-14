@@ -49,11 +49,11 @@
 
     <section>
         <div class="mt-3">
-            <table class="table table-hover">
+            <table class="table table-hover table-border">
                 <thead>
                     <tr>
-                        <th class="px-4">Ad Preview</th>
-                        <th>Ad Name</th>
+                        <!-- <th class="px-4">Ad Preview</th> -->
+                        <th >Ad Name</th>
                         <th>Status</th>
                         <th>Campaign ID</th>
                         <th>Campaign Type</th>

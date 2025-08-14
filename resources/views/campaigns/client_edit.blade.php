@@ -188,11 +188,10 @@
                             @for($i = 0; $i < $itemCount; $i++)
                                 <tr>
                                     <td class="px-4">
-                                        @if(!empty($adPreviews[$i]))
-                                            <img src="{{ asset('storage/' . $adPreviews[$i]) }}" alt="Ad Preview"
-                                                style="max-width: 100px;">
+                                        @if(!empty($adPreviews[$i]) && file_exists(public_path($adPreviews[$i])))
+                                            <img src="{{ asset($adPreviews[$i]) }}" alt="Ad Preview" style="max-width: 100px;">
                                         @else
-                                            <img src="https://placehold.co/100" alt="No Preview">
+                                            <img src="https://placehold.co/100" alt="No Preview" style="max-width: 100px;">
                                         @endif
                                     </td>
                                     <td>{{ $sizes[$i] ?? 'N/A' }}</td>

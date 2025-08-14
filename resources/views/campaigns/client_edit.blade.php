@@ -222,6 +222,34 @@
         </section>
 
         <section>
+            <div class="row mt-4 mx-4 ">
+                <div class="col-12 border border-2 rounded-3 ">
+                    <div class="m-2">
+                        <p class="client-cards-heading">Top Sites</p>
+                        <table class="table table-bordered table-hover">
+                            <tbody>
+                                @if(!empty($top_sites) && (is_array($top_sites) || is_object($top_sites)))
+                                    @foreach ($top_sites as $site)
+                                        <tr>
+                                            <td>
+                                                <a href="{{ $site }}" target="_blank">{{ $site }}</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td class="text-center text-muted">No sites available</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
             <div class="row mt-4 mx-4 justify-content-center">
                 <div class="col-12 border border-2 rounded-3 ">
                     <div class="m-2">
@@ -255,33 +283,6 @@
             </div>
         </section>
 
-        <section>
-            <div class="row mt-4 mx-4 ">
-                <div class="col-12 border border-2 rounded-3 ">
-                    <div class="m-2">
-                        <p class="client-cards-heading">Top Sites</p>
-                        <table class="table table-bordered table-hover">
-                            <tbody>
-                                @if(!empty($top_sites) && (is_array($top_sites) || is_object($top_sites)))
-                                    @foreach ($top_sites as $site)
-                                        <tr>
-                                            <td>
-                                                <a href="{{ $site }}" target="_blank">{{ $site }}</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    <tr>
-                                        <td class="text-center text-muted">No sites available</td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                        </table>
-
-                    </div>
-                </div>
-            </div>
-        </section>
 
 
     </section>
@@ -450,14 +451,29 @@
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
 
-                // Calculate width and height
                 const imgProps = pdf.getImageProperties(imgData);
                 const pdfWidth = pdf.internal.pageSize.getWidth();
                 const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
                 pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 
-                // Generate file name with today's date
+                // Add clickable links
+                const scaleX = pdfWidth / canvas.width;
+                const scaleY = pdfHeight / canvas.height;
+
+                section.querySelectorAll('a').forEach(a => {
+                    const rect = a.getBoundingClientRect();
+                    const sectionRect = section.getBoundingClientRect();
+                    const x = (rect.left - sectionRect.left) * scaleX;
+                    const y = (rect.top - sectionRect.top) * scaleY;
+                    const w = rect.width * scaleX;
+                    const h = rect.height * scaleY;
+
+                    if (a.href) {
+                        pdf.link(x, y, w, h, { url: a.href });
+                    }
+                });
+
                 const today = new Date();
                 const dd = String(today.getDate()).padStart(2, '0');
                 const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -468,6 +484,7 @@
                 pdf.save(fileName);
             });
         });
+
 
 
     </script>
